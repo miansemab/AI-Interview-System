@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Assessment | InterviewAI</title>
+    <link rel="stylesheet" href="{% static 'interviews/css/app.css' %}">
+    <link rel="stylesheet" href="{% static 'interviews/css/interview_complete.css' %}">
+</head>
+<body class="report-page">
+    <header class="report-topbar">
+        <a class="report-brand" href="{% url 'home' %}" aria-label="InterviewAI home">
+            <span class="report-brand-mark" aria-hidden="true">IA</span>
+            <span>Interview<span class="accent">AI</span></span>
+        </a>
+        <span class="report-topbar-label"><i class="report-status-dot" aria-hidden="true"></i> Assessment report</span>
+    </header>
+
+    <main class="report-main">
+        <section class="report-hero" aria-labelledby="reportTitle">
+            <div class="report-intro">
+                <p class="report-eyebrow">{{ completion_type }} · Interview assessment</p>
+                <h1 id="reportTitle">{{ session.candidate_name|default:"Candidate" }}</h1>
+                <p>{{ session.role.name|default:"Role not recorded" }} interview results</p>
+                <div class="report-meta">
+                    <span><strong>Interview date</strong> {{ report_date|date:"F j, Y"|default:"Not recorded" }}</span>
+                    <span><strong>Status</strong> {{ completion_type }}</span>
+                </div>
+            </div>
+
+            <div class="report-score-card">
+                <span class="report-label">Overall assessment</span>
+                {% if assessment %}
+                    <strong class="report-score">{{ assessment.overall_score|floatformat:1 }}<small> / 100</small></strong>
+                    <span class="report-level">{{ assessment.skill_level|default:"Level not recorded" }}</span>
+                    <div class="score-track" role="progressbar" aria-label="Overall assessment score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ assessment.overall_score }}">
+                        <span style="width:{% if assessment.overall_score < 0 %}0{% elif assessment.overall_score > 100 %}100{% else %}{{ assessment.overall_score }}{% endif %}%"></span>
+                    </div>
+                {% else %}
+                    <strong class="report-score" style="font-size:27px">Not assessed</strong>
+                    <span class="report-level">Insufficient evaluation data</span>
+                    <p class="report-note">No saved final assessment is available for this interview.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        {% if evaluated_question_count < total_question_count %}
+        <aside class="report-coverage-callout" role="status">
+            <strong>Limited assessment coverage · {{ coverage_percent }}% evaluated</strong>
+            {{ evaluated_question_count }} of {{ total_question_count }} planned questions have saved evaluations. Treat this as an early snapshot; complete more questions before drawing strong conclusions.
+        </aside>
+        {% endif %}
+
+        <section class="report-section" aria-labelledby="overviewTitle">
+            <div class="report-section-heading">
+                <div>
+                    <h2 id="overviewTitle">Performance overview</h2>
+                    <p class="report-section-intro">Counts distinguish evaluated answers from unanswered and unevaluated responses.</p>
+                </div>
+            </div>
+
+            <div class="report-overview">
+                <article class="report-card"><span class="report-label">Planned questions</span><strong class="report-metric-value">{{ total_question_count }}</strong></article>
+                <article class="report-card"><span class="report-label">Answers submitted</span><strong class="report-metric-value">{{ attempted_question_count }}</strong></article>
+                <article class="report-card"><span class="report-label">Answers evaluated</span><strong class="report-metric-value">{{ evaluated_question_count }}</strong></article>
+                <article class="report-card"><span class="report-label">Correct</span><strong class="report-metric-value">{{ correct_count }}</strong><span class="report-metric-note">Score 80–100</span></article>
+                <article class="report-card"><span class="report-label">Partially correct</span><strong class="report-metric-value">{{ partial_count }}</strong><span class="report-metric-note">Score 60–79.99</span></article>
+                <article class="report-card"><span class="report-label">Incorrect</span><strong class="report-metric-value">{{ incorrect_count }}</strong><span class="report-metric-note">Score below 60</span></article>
+                <article class="report-card"><span class="report-label">Unanswered</span><strong class="report-metric-value">{{ unanswered_count }}</strong><span class="report-metric-note">Not submitted</span></article>
+                <article class="report-card"><span class="report-label">Submitted, not evaluated</span><strong class="report-metric-value">{{ submitted_not_evaluated_count }}</strong></article>
+            </div>
+
+            <div class="coverage-overview">
+                <strong class="coverage-number">{{ coverage_percent }}%</strong>
+                <div>
+                    <span class="report-label">Evaluation coverage</span>
+                    <div class="coverage-track" role="progressbar" aria-label="Evaluation coverage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ coverage_percent }}">
+                        <span style="width:{{ coverage_percent }}%"></span>
+                    </div>
+                </div>
+            </div>
+            {% if assessment and assessment.interview_summary %}
+                <p class="report-summary">{{ assessment.interview_summary }}</p>
+            {% elif not assessment %}
+                <p class="report-summary">A performance summary will be available when this interview has saved evaluations.</p>
+            {% endif %}
+        </section>
+
+        <section class="report-section" aria-labelledby="skillsTitle">
+            <div class="report-section-heading">
+                <div>
+                    <h2 id="skillsTitle">Skill breakdown</h2>
+                    <p class="report-section-intro">Scores and counts come from the saved final assessment.</p>
+                </div>
+            </div>
+            {% if assessment and assessment.skill_scores %}
+                <div class="skill-list">
+                    {% for skill_name, data in assessment.skill_scores.items %}
+                    <div>
+                        <div class="skill-head">
+                            <strong>{{ skill_name }}</strong>
+                            <span>{{ data.score|floatformat:1 }}/100 · {{ data.questions }} evaluated answer{{ data.questions|pluralize }}</span>
+                        </div>
+                        <div class="skill-track" role="progressbar" aria-label="{{ skill_name }} score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ data.score }}">
+                            <span style="width:{% if data.score < 0 %}0{% elif data.score > 100 %}100{% else %}{{ data.score }}{% endif %}%"></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="report-empty">Skill-level conclusions are not available without saved assessment data.</p>
+            {% endif %}
+        </section>
+
+        <div class="report-two-column">
+            <section class="report-section" aria-labelledby="areasTitle">
+                <div class="report-section-heading"><h2 id="areasTitle">Strengths and development areas</h2></div>
+                <div class="insight-grid">
+                    <article class="insight-card">
+                        <h3>Strong areas</h3>
+                        {% if assessment and assessment.strong_skills %}
+                            <ul class="report-list">{% for item in assessment.strong_skills %}<li>{{ item }}</li>{% endfor %}</ul>
+                        {% else %}<p>No strong areas were identified from the saved assessment data.</p>{% endif %}
+                    </article>
+                    <article class="insight-card">
+                        <h3>Improvement areas</h3>
+                        {% if assessment and assessment.weak_skills %}
+                            <ul class="report-list">{% for item in assessment.weak_skills %}<li>{{ item }}</li>{% endfor %}</ul>
+                        {% else %}<p>No priority improvement areas were identified.</p>{% endif %}
+                    </article>
+                    <article class="insight-card">
+                        <h3>Missing concepts</h3>
+                        {% if assessment and assessment.missing_concepts %}
+                            <ul class="report-list">{% for item in assessment.missing_concepts %}<li>{{ item }}</li>{% endfor %}</ul>
+                        {% else %}<p>No missing concepts are recorded in the final assessment.</p>{% endif %}
+                    </article>
+                    <article class="insight-card">
+                        <h3>Saved training priorities</h3>
+                        {% if assessment and assessment.training_needs %}
+                            <ul class="report-list">{% for item in assessment.training_needs %}<li>{{ item }}</li>{% endfor %}</ul>
+                        {% else %}<p>No saved training priorities are available.</p>{% endif %}
+                    </article>
+                </div>
+            </section>
+
+            <section class="report-section" aria-labelledby="insightsTitle">
+                <div class="report-section-heading"><h2 id="insightsTitle">Confidence &amp; Communication Insights</h2></div>
+                <div class="insight-grid">
+                    <article class="insight-card">
+                        <h3>Candidate confidence</h3>
+                        <strong class="insight-score">{{ confidence_assessment.label }}</strong>
+                        <p>{{ confidence_assessment.explanation }}</p>
+                    </article>
+                    <article class="insight-card">
+                        <h3>Written-answer communication rubric</h3>
+                        {% if communication_score != None %}
+                            <strong class="insight-score">{{ communication_score|floatformat:1 }} / 100</strong>
+                            <p>Average of the saved communication rubric scores across {{ evaluated_question_count }} evaluated answer{{ evaluated_question_count|pluralize }}.</p>
+                        {% else %}
+                            <strong class="insight-score">Insufficient data</strong>
+                            <p>No evaluated answers are available for a communication rubric summary.</p>
+                        {% endif %}
+                    </article>
+                </div>
+                <p class="report-note">Communication scores reflect the existing answer evaluation rubric. They do not measure vocal confidence, emotion, eye contact, body language, or identity.</p>
+                <h3 style="margin-top:18px;font-size:14px">Coaching suggestions</h3>
+                <ul class="report-list">
+                    {% for suggestion in coaching_suggestions %}<li>{{ suggestion }}</li>{% endfor %}
+                </ul>
+            </section>
+        </div>
+
+        <section class="report-section" aria-labelledby="planTitle">
+            <div class="report-section-heading">
+                <div>
+                    <h2 id="planTitle">Personalized action plan</h2>
+                    <p class="report-section-intro">Suggested practice steps based on saved skill scores and missing concepts.</p>
+                </div>
+            </div>
+            {% if study_plan %}
+                <div class="study-plan">
+                    {% for item in study_plan %}
+                    <article class="study-plan-item">
+                        <h3>{{ item.title }}</h3>
+                        <p>{{ item.detail }}</p>
+                        <span class="plan-tag">Suggested exercise</span>
+                    </article>
+                    {% endfor %}
+                </div>
+            {% elif evaluated_question_count == 0 %}
+                <p class="report-empty">Submit and evaluate more answers before a personalized study plan can be produced.</p>
+            {% else %}
+                <p class="report-empty">No specific study priorities were generated from the saved assessment. Continue practicing explanations and examples for this role.</p>
+            {% endif %}
+            {% if evaluated_question_count < total_question_count %}
+                <p class="report-note">Suggested next step: complete more interview questions so future feedback can cover a broader sample.</p>
+            {% endif %}
+        </section>
+
+        <section class="report-section" aria-labelledby="reviewTitle">
+            <div class="report-section-heading">
+                <div>
+                    <h2 id="reviewTitle">Question-by-question review</h2>
+                    <p class="report-section-intro">Each generated question is listed. Planned adaptive questions that were never generated are identified without inventing question text.</p>
+                </div>
+            </div>
+            <div class="review-list">
+                {% for item in question_reviews %}
+                <details class="review-item">
+                    <summary>
+                        <span class="review-summary-main">
+                            <span class="report-label">Question {{ item.order }}{% if item.question %} · {{ item.question.skill.name }}{% endif %}</span>
+                            <span class="review-question-title">{% if item.planned_placeholder %}Question not generated before this interview ended{% else %}{{ item.question.question }}{% endif %}</span>
+                        </span>
+                        <span class="status-pill status-{{ item.status_class }}">{{ item.evaluation_status }}{% if item.evaluation %} · {{ item.evaluation.total_score|floatformat:1 }}/100{% endif %}</span>
+                    </summary>
+                    <div class="review-content">
+                        {% if item.planned_placeholder %}
+                            <p>This planned question was not generated or presented during this interview, so it has no question text or answer to review.</p>
+                        {% else %}
+                            {% if item.answer %}
+                                <h4>Submitted answer</h4>
+                                <p>{{ item.answer.transcript|default:"(No transcript saved)" }}</p>
+                            {% else %}
+                                <p>This question was not answered and was not scored.</p>
+                            {% endif %}
+
+                            {% if item.evaluation %}
+                                <h4>Evaluation feedback</h4>
+                                <p>{{ item.evaluation.ai_feedback|default:"No feedback was saved for this answer." }}</p>
+                                {% if item.evaluation.missing_concepts %}
+                                    <h4>Missing concepts</h4>
+                                    <ul>{% for concept in item.evaluation.missing_concepts %}<li>{{ concept }}</li>{% endfor %}</ul>
+                                {% endif %}
+                                {% if item.evaluation.weaknesses %}
+                                    <h4>Development suggestions</h4>
+                                    <ul>{% for suggestion in item.evaluation.weaknesses %}<li>{{ suggestion }}</li>{% endfor %}</ul>
+                                {% endif %}
+                                {% if item.evaluation.recommended_difficulty %}
+                                    <p><strong>Suggested next difficulty:</strong> {{ item.evaluation.recommended_difficulty|title }}</p>
+                                {% endif %}
+                                {% if item.question.expected_concepts %}
+                                    <h4>Key concepts listed in the question bank</h4>
+                                    <ul>{% for concept in item.question.expected_concepts %}<li>{{ concept }}</li>{% endfor %}</ul>
+                                {% endif %}
+                            {% elif item.answer %}
+                                <p class="report-note">This saved answer has no evaluation and is excluded from the score and evaluated-answer counts.</p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </details>
+                {% empty %}
+                    <p class="report-empty">No question records are available for review.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <nav class="report-actions" aria-label="Report actions">
+            <button type="button" class="primary-button" onclick="window.print()">Print / Save as PDF</button>
+            <a href="{% url 'home' %}" class="secondary-button">Back to Home</a>
+            <a href="{% url 'interviews:start_interview' %}" class="primary-button">Start Another Interview</a>
+        </nav>
+        <p class="report-note" style="text-align:center">Evaluation bands use the existing rubric: correct at 80–100, partially correct at 60–79.99, and incorrect below 60. Unanswered questions are not scored.</p>
+    </main>
+
+    <footer class="report-footer"><span>INTERVIEWAI · Assessment report</span><span>Use these suggestions as a guide for further practice.</span></footer>
+</body>
+</html>

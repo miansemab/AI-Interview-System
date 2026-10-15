@@ -1,0 +1,100 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Interview | InterviewAI</title>
+    <link rel="stylesheet" href="{% static 'interviews/css/app.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="/">
+            <span class="brand-icon">✳</span>
+            <span>Interview<span class="accent">AI</span></span>
+        </a>
+        <a class="secondary-button" href="/">← Back home</a>
+    </header>
+
+    <main class="page-container">
+        <div class="page-heading">
+            <div class="eyebrow">✦ PERSONALIZE YOUR SESSION</div>
+            <h1>Let's set up your <span class="gradient-text">interview.</span></h1>
+            <p>Tell us a little about yourself and choose the role you want to practice for.</p>
+        </div>
+
+        <section class="panel">
+            <h2>Candidate information</h2>
+            <p class="muted" style="margin-top: 9px; font-size: 13px;">
+                Complete the details below to prepare your interview session.
+            </p>
+
+            <form method="post" action="{% url 'interviews:start_interview' %}">
+                {% csrf_token %}
+
+                <div class="form-grid" style="margin-top: 28px;">
+                    <div class="form-field">
+                        <label for="candidate_name">Full name</label>
+                        <input
+                            type="text"
+                            id="candidate_name"
+                            name="candidate_name"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="candidate_email">Email address</label>
+                        <input
+                            type="email"
+                            id="candidate_email"
+                            name="candidate_email"
+                            placeholder="you@example.com"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-field full-width">
+                        <label for="role">Interview role</label>
+                        <select id="role" name="role" required>
+                            <option value="">Choose a role</option>
+                            {% for role in roles %}
+                                <option value="{{ role.id }}">
+                                    {{ role.name }}
+                                </option>
+                            {% empty %}
+                                <option value="" disabled>No active roles available</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                {% if not roles %}
+                    <p class="error-message" style="margin-top: 18px;">
+                        No active interview roles are available yet. Please add or activate a role in the admin panel.
+                    </p>
+                {% endif %}
+
+                <button
+                    class="form-button"
+                    type="submit"
+                    {% if not roles %}disabled{% endif %}
+                >
+                    Continue to interview <span>→</span>
+                </button>
+            </form>
+        </section>
+
+        <p class="muted" style="margin-top: 22px; font-size: 11px; text-align: center;">
+            Your session will use the questions configured for the selected role.
+        </p>
+    </main>
+
+    <footer class="site-footer">
+        <span>INTERVIEWAI © 2026</span>
+        <span>YOUR NEXT OPPORTUNITY STARTS HERE</span>
+    </footer>
+</body>
+</html>

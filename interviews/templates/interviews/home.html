@@ -1,0 +1,122 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterviewAI — Intelligent Interview Simulator</title>
+    <link rel="stylesheet" href="{% static 'interviews/css/app.css' %}">
+</head>
+<body class="landing-page">
+    <header class="topbar">
+        <a class="brand" href="/">
+            <span class="brand-icon">✳</span>
+            <span>Interview<span class="accent">AI</span></span>
+        </a>
+        <span class="system-status"><span class="status-dot"></span> AI SYSTEM READY</span>
+    </header>
+
+    <main class="hero">
+        <section class="hero-copy">
+            <div class="eyebrow"><span>✦</span> YOUR NEXT-LEVEL INTERVIEW EXPERIENCE</div>
+            <h1>Meet your future.<br>One interview <span class="gradient-text">at a time.</span></h1>
+            <p class="hero-description">
+                Practice real-world technical interviews with an intelligent
+                interviewer. Speak naturally, demonstrate your skills, and
+                discover where you can improve.
+            </p>
+
+            <div class="hero-actions">
+                <a href="{% url 'interviews:start_interview' %}" class="primary-button">
+                    Start an interview <span>↗</span>
+                </a>
+                <a href="#experience" class="secondary-button">Explore the experience</a>
+            </div>
+
+            <div class="trust-row">
+                <div class="avatar-stack">
+                    <span>AI</span><span>ML</span><span>DEV</span>
+                </div>
+                <p>Practice at your pace.<br><strong>Improve with every answer.</strong></p>
+            </div>
+        </section>
+
+        <section class="hologram-stage" id="experience" aria-label="Animated AI interviewer">
+            <div class="stage-grid"></div>
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="holo-glow"></div>
+
+            <div class="holo-card">
+                <div class="holo-card-top">
+                    <span><span class="status-dot"></span> INTERVIEWER ONLINE</span>
+                    <span>AI / 01</span>
+                </div>
+
+                <div class="hologram" id="heroAvatar">
+                    <div class="holo-ring ring-back"></div>
+                    <div class="holo-head">
+                        <div class="head-shine"></div>
+                        <div class="head-side"></div>
+                        <div class="eye eye-left"></div>
+                        <div class="eye eye-right"></div>
+                        <div class="nose-line"></div>
+                        <div class="mouth"></div>
+                        <div class="neck"></div>
+                        <div class="shoulders"></div>
+                    </div>
+                    <div class="scan-line"></div>
+                    <div class="holo-ring ring-front"></div>
+                </div>
+
+                <div class="avatar-caption">
+                    <span class="caption-label">YOUR AI INTERVIEWER</span>
+                    <h2>Alex <span>✦</span></h2>
+                    <p>Technical Interview Specialist</p>
+                </div>
+
+                <div class="voice-visualizer" id="heroVisualizer" aria-label="Audio visualizer">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                    <i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <div class="holo-footer">
+                    <span>● NEURAL INTERFACE</span>
+                    <span>VOICE ENABLED</span>
+                </div>
+            </div>
+
+            <div class="floating-chip chip-top">
+                <span class="chip-icon">◉</span>
+                <span><strong>Voice interaction</strong><small>Speak naturally</small></span>
+            </div>
+            <div class="floating-chip chip-bottom">
+                <span class="chip-icon">⌁</span>
+                <span><strong>Adaptive questions</strong><small>Built around your skills</small></span>
+            </div>
+        </section>
+    </main>
+
+    <section class="feature-strip">
+        <article>
+            <span class="feature-icon">⌁</span>
+            <div><h3>Voice-first practice</h3><p>Answer interview questions out loud.</p></div>
+        </article>
+        <article>
+            <span class="feature-icon">◎</span>
+            <div><h3>Adaptive interviews</h3><p>Questions selected by your interview engine.</p></div>
+        </article>
+        <article>
+            <span class="feature-icon">↗</span>
+            <div><h3>Actionable feedback</h3><p>Review your performance after the interview.</p></div>
+        </article>
+    </section>
+
+    <footer class="site-footer">
+        <span>INTERVIEWAI © 2026</span>
+        <span>BUILT FOR YOUR NEXT OPPORTUNITY</span>
+    </footer>
+
+    <script src="{% static 'interviews/js/app.js' %}"></script>
+</body>
+</html>

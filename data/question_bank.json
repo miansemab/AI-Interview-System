@@ -1,0 +1,787 @@
+{
+  "roles": [
+    {
+      "name": "Python Backend Developer",
+      "category": "Software Development",
+      "description": "Backend developer responsible for building APIs, business logic, database integrations, authentication, testing, debugging and maintainable server-side applications using Python.",
+
+      "environment": {
+        "job_level": "Junior to Mid-Level",
+        "interview_duration_minutes": 30,
+        "question_count": 15,
+
+        "difficulty_progression": [
+          "beginner",
+          "intermediate",
+          "advanced"
+        ],
+
+        "assessment_dimensions": [
+          "technical_accuracy",
+          "conceptual_understanding",
+          "practical_application",
+          "problem_solving",
+          "communication"
+        ],
+
+        "interview_rules": {
+          "avoid_duplicate_questions": true,
+          "allow_follow_up_questions": true,
+          "adaptive_difficulty": true,
+          "randomize_question_order": true,
+          "evaluate_every_answer": true
+        },
+
+        "technology_stack": [
+          "Python",
+          "Django",
+          "Django REST Framework",
+          "SQL",
+          "SQLite",
+          "PostgreSQL",
+          "Git",
+          "REST APIs",
+          "Testing"
+        ]
+      },
+
+      "skills": [
+        {
+          "name": "Python",
+          "category": "Programming Language",
+          "description": "Core Python programming, object-oriented programming, functions, data structures, exceptions and clean code.",
+          "weight": 25,
+          "is_required": true,
+
+          "topics": [
+            {
+              "name": "Python Fundamentals",
+              "description": "Variables, data types, control flow and basic Python behavior.",
+
+              "questions": [
+                {
+                  "question_id": "PY-FUND-001",
+                  "question": "What are the main built-in data types in Python, and when would you use a list, tuple, set, or dictionary?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "list",
+                    "tuple",
+                    "set",
+                    "dictionary",
+                    "mutability",
+                    "key-value pairs"
+                  ],
+                  "keywords": [
+                    "list",
+                    "tuple",
+                    "set",
+                    "dict",
+                    "mutable",
+                    "immutable"
+                  ]
+                },
+                {
+                  "question_id": "PY-FUND-002",
+                  "question": "Explain the difference between == and is in Python. Give an example where using is incorrectly could cause a bug.",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "value comparison",
+                    "identity comparison",
+                    "object identity"
+                  ],
+                  "keywords": [
+                    "==",
+                    "is",
+                    "identity",
+                    "value"
+                  ]
+                },
+                {
+                  "question_id": "PY-FUND-003",
+                  "question": "You receive a list of numbers from an API. How would you find the duplicate values efficiently?",
+                  "difficulty": "intermediate",
+                  "question_type": "problem_solving",
+                  "expected_concepts": [
+                    "set",
+                    "iteration",
+                    "time complexity",
+                    "duplicate detection"
+                  ],
+                  "keywords": [
+                    "set",
+                    "loop",
+                    "duplicates",
+                    "O(n)"
+                  ]
+                }
+              ]
+            },
+
+            {
+              "name": "Functions",
+              "description": "Python functions, arguments, return values, scope and reusable code.",
+
+              "questions": [
+                {
+                  "question_id": "PY-FUNC-001",
+                  "question": "What is the difference between a parameter and an argument in Python?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "function definition",
+                    "parameter",
+                    "function call",
+                    "argument"
+                  ],
+                  "keywords": [
+                    "parameter",
+                    "argument",
+                    "function"
+                  ]
+                },
+                {
+                  "question_id": "PY-FUNC-002",
+                  "question": "What are *args and **kwargs, and when are they useful in a backend application?",
+                  "difficulty": "intermediate",
+                  "question_type": "practical",
+                  "expected_concepts": [
+                    "variable positional arguments",
+                    "variable keyword arguments",
+                    "flexible function interfaces"
+                  ],
+                  "keywords": [
+                    "*args",
+                    "**kwargs",
+                    "positional",
+                    "keyword"
+                  ]
+                }
+              ]
+            },
+
+            {
+              "name": "Object Oriented Programming",
+              "description": "Classes, objects, inheritance, encapsulation, abstraction and polymorphism.",
+
+              "questions": [
+                {
+                  "question_id": "PY-OOP-001",
+                  "question": "What is object-oriented programming, and why is it useful when building large backend applications?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "classes",
+                    "objects",
+                    "encapsulation",
+                    "reusability",
+                    "maintainability"
+                  ],
+                  "keywords": [
+                    "class",
+                    "object",
+                    "encapsulation",
+                    "reusability"
+                  ]
+                },
+                {
+                  "question_id": "PY-OOP-002",
+                  "question": "Explain inheritance and polymorphism with a practical backend example.",
+                  "difficulty": "intermediate",
+                  "question_type": "scenario",
+                  "expected_concepts": [
+                    "inheritance",
+                    "method overriding",
+                    "polymorphism",
+                    "code reuse"
+                  ],
+                  "keywords": [
+                    "inheritance",
+                    "polymorphism",
+                    "override"
+                  ]
+                },
+                {
+                  "question_id": "PY-OOP-003",
+                  "question": "You inherit a backend project containing a very large class that handles authentication, database operations and email notifications. How would you refactor it?",
+                  "difficulty": "advanced",
+                  "question_type": "problem_solving",
+                  "expected_concepts": [
+                    "single responsibility",
+                    "separation of concerns",
+                    "service layer",
+                    "dependency management",
+                    "maintainability"
+                  ],
+                  "keywords": [
+                    "single responsibility",
+                    "separation",
+                    "service",
+                    "refactor"
+                  ]
+                }
+              ]
+            },
+
+            {
+              "name": "Exception Handling",
+              "description": "Handling runtime errors safely and creating reliable backend applications.",
+
+              "questions": [
+                {
+                  "question_id": "PY-EXC-001",
+                  "question": "Why is exception handling important in a backend application? Explain try, except, else and finally.",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "runtime errors",
+                    "try",
+                    "except",
+                    "else",
+                    "finally"
+                  ],
+                  "keywords": [
+                    "try",
+                    "except",
+                    "finally",
+                    "error"
+                  ]
+                },
+                {
+                  "question_id": "PY-EXC-002",
+                  "question": "An API sometimes crashes because a database record does not exist. How would you handle this situation properly?",
+                  "difficulty": "intermediate",
+                  "question_type": "scenario",
+                  "expected_concepts": [
+                    "exception handling",
+                    "validation",
+                    "404 response",
+                    "logging"
+                  ],
+                  "keywords": [
+                    "DoesNotExist",
+                    "404",
+                    "validation",
+                    "logging"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "name": "Django",
+          "category": "Backend Framework",
+          "description": "Django architecture, models, views, URLs, templates, forms, authentication and application design.",
+          "weight": 25,
+          "is_required": true,
+
+          "topics": [
+            {
+              "name": "Django Fundamentals",
+              "description": "Django project structure, apps, settings, URLs and request flow.",
+
+              "questions": [
+                {
+                  "question_id": "DJ-FUND-001",
+                  "question": "Explain the difference between a Django project and a Django app.",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "project",
+                    "application",
+                    "settings",
+                    "reusable app"
+                  ],
+                  "keywords": [
+                    "project",
+                    "app",
+                    "settings",
+                    "reusable"
+                  ]
+                },
+                {
+                  "question_id": "DJ-FUND-002",
+                  "question": "Walk through what happens when a user sends an HTTP request to a Django application.",
+                  "difficulty": "intermediate",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "URL routing",
+                    "view",
+                    "middleware",
+                    "request",
+                    "response"
+                  ],
+                  "keywords": [
+                    "request",
+                    "URL",
+                    "view",
+                    "middleware",
+                    "response"
+                  ]
+                }
+              ]
+            },
+
+            {
+              "name": "Django Models and ORM",
+              "description": "Database models, relationships and Django ORM queries.",
+
+              "questions": [
+                {
+                  "question_id": "DJ-ORM-001",
+                  "question": "What is Django ORM and why is it useful?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "object relational mapper",
+                    "models",
+                    "database queries",
+                    "Python abstraction"
+                  ],
+                  "keywords": [
+                    "ORM",
+                    "model",
+                    "query",
+                    "database"
+                  ]
+                },
+                {
+                  "question_id": "DJ-ORM-002",
+                  "question": "Explain ForeignKey, OneToOneField and ManyToManyField in Django.",
+                  "difficulty": "intermediate",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "one-to-many",
+                    "one-to-one",
+                    "many-to-many",
+                    "relationships"
+                  ],
+                  "keywords": [
+                    "ForeignKey",
+                    "OneToOneField",
+                    "ManyToManyField"
+                  ]
+                },
+                {
+                  "question_id": "DJ-ORM-003",
+                  "question": "A Django page is making hundreds of database queries because related objects are accessed inside a loop. How would you investigate and optimize it?",
+                  "difficulty": "advanced",
+                  "question_type": "debugging",
+                  "expected_concepts": [
+                    "N+1 query problem",
+                    "select_related",
+                    "prefetch_related",
+                    "query optimization"
+                  ],
+                  "keywords": [
+                    "N+1",
+                    "select_related",
+                    "prefetch_related",
+                    "optimization"
+                  ]
+                }
+              ]
+            },
+
+            {
+              "name": "Django Authentication",
+              "description": "User authentication, permissions, sessions and access control.",
+
+              "questions": [
+                {
+                  "question_id": "DJ-AUTH-001",
+                  "question": "How does Django's built-in authentication system work at a high level?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "User model",
+                    "authentication",
+                    "sessions",
+                    "login",
+                    "logout"
+                  ],
+                  "keywords": [
+                    "User",
+                    "authentication",
+                    "session",
+                    "login"
+                  ]
+                },
+                {
+                  "question_id": "DJ-AUTH-002",
+                  "question": "How would you restrict a Django view so that only authenticated users can access it?",
+                  "difficulty": "intermediate",
+                  "question_type": "practical",
+                  "expected_concepts": [
+                    "login_required",
+                    "authentication",
+                    "permissions"
+                  ],
+                  "keywords": [
+                    "login_required",
+                    "authentication",
+                    "permission"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "name": "REST APIs",
+          "category": "API Development",
+          "description": "Designing, building and consuming REST APIs.",
+
+          "weight": 15,
+          "is_required": true,
+
+          "topics": [
+            {
+              "name": "HTTP and REST",
+              "description": "HTTP methods, status codes, REST principles and API design.",
+
+              "questions": [
+                {
+                  "question_id": "API-REST-001",
+                  "question": "What is a REST API? Explain GET, POST, PUT, PATCH and DELETE.",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "REST",
+                    "HTTP methods",
+                    "resources",
+                    "CRUD"
+                  ],
+                  "keywords": [
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "PATCH",
+                    "DELETE",
+                    "REST"
+                  ]
+                },
+                {
+                  "question_id": "API-REST-002",
+                  "question": "What is the difference between PUT and PATCH, and when would you use each?",
+                  "difficulty": "intermediate",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "full update",
+                    "partial update",
+                    "idempotency"
+                  ],
+                  "keywords": [
+                    "PUT",
+                    "PATCH",
+                    "partial",
+                    "update"
+                  ]
+                }
+              ]
+            },
+
+            {
+              "name": "API Error Handling",
+              "description": "Designing meaningful API errors and HTTP responses.",
+
+              "questions": [
+                {
+                  "question_id": "API-ERR-001",
+                  "question": "Which HTTP status code would you return when a requested resource does not exist, and why?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "404 Not Found",
+                    "resource existence"
+                  ],
+                  "keywords": [
+                    "404",
+                    "Not Found"
+                  ]
+                },
+                {
+                  "question_id": "API-ERR-002",
+                  "question": "An API receives invalid user data. How should the backend communicate the validation failure to the client?",
+                  "difficulty": "intermediate",
+                  "question_type": "practical",
+                  "expected_concepts": [
+                    "validation",
+                    "400 response",
+                    "structured error response",
+                    "clear error messages"
+                  ],
+                  "keywords": [
+                    "validation",
+                    "400",
+                    "error response"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "name": "Databases and SQL",
+          "category": "Database",
+          "description": "Relational database concepts, SQL queries, relationships, indexing and transactions.",
+          "weight": 15,
+          "is_required": true,
+
+          "topics": [
+            {
+              "name": "SQL Fundamentals",
+              "description": "Basic SQL operations and relational database concepts.",
+
+              "questions": [
+                {
+                  "question_id": "SQL-FUND-001",
+                  "question": "What is the difference between a primary key and a foreign key?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "primary key",
+                    "foreign key",
+                    "uniqueness",
+                    "relationship"
+                  ],
+                  "keywords": [
+                    "primary key",
+                    "foreign key",
+                    "relationship"
+                  ]
+                },
+                {
+                  "question_id": "SQL-FUND-002",
+                  "question": "Write or describe a SQL query that returns users who have placed at least one order.",
+                  "difficulty": "intermediate",
+                  "question_type": "practical",
+                  "expected_concepts": [
+                    "JOIN",
+                    "users",
+                    "orders",
+                    "relationships",
+                    "distinct"
+                  ],
+                  "keywords": [
+                    "JOIN",
+                    "orders",
+                    "users",
+                    "DISTINCT"
+                  ]
+                }
+              ]
+            },
+
+            {
+              "name": "Database Performance",
+              "description": "Indexes, query optimization and database performance.",
+
+              "questions": [
+                {
+                  "question_id": "SQL-PERF-001",
+                  "question": "What is a database index, and how can it improve query performance?",
+                  "difficulty": "intermediate",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "index",
+                    "faster lookup",
+                    "query performance",
+                    "storage tradeoff"
+                  ],
+                  "keywords": [
+                    "index",
+                    "performance",
+                    "lookup"
+                  ]
+                },
+                {
+                  "question_id": "SQL-PERF-002",
+                  "question": "A query becomes slow after the database grows from ten thousand to several million records. What would you investigate first?",
+                  "difficulty": "advanced",
+                  "question_type": "problem_solving",
+                  "expected_concepts": [
+                    "query plan",
+                    "indexes",
+                    "full table scan",
+                    "database statistics",
+                    "query optimization"
+                  ],
+                  "keywords": [
+                    "query plan",
+                    "index",
+                    "full scan",
+                    "optimization"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "name": "Git and Software Engineering",
+          "category": "Development Practices",
+          "description": "Version control, debugging, testing and maintainable software development.",
+          "weight": 10,
+          "is_required": true,
+
+          "topics": [
+            {
+              "name": "Git",
+              "description": "Version control and collaborative development.",
+
+              "questions": [
+                {
+                  "question_id": "GIT-001",
+                  "question": "What problem does Git solve, and what is the difference between commit, push and pull?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "version control",
+                    "commit",
+                    "remote repository",
+                    "push",
+                    "pull"
+                  ],
+                  "keywords": [
+                    "Git",
+                    "commit",
+                    "push",
+                    "pull",
+                    "repository"
+                  ]
+                },
+                {
+                  "question_id": "GIT-002",
+                  "question": "You made changes on a feature branch and another developer changed the same lines on main. What is a merge conflict and how would you resolve it?",
+                  "difficulty": "intermediate",
+                  "question_type": "scenario",
+                  "expected_concepts": [
+                    "merge conflict",
+                    "conflicting changes",
+                    "manual resolution",
+                    "testing after merge"
+                  ],
+                  "keywords": [
+                    "merge conflict",
+                    "branch",
+                    "resolve",
+                    "merge"
+                  ]
+                }
+              ]
+            },
+
+            {
+              "name": "Testing",
+              "description": "Automated testing and reliable backend development.",
+
+              "questions": [
+                {
+                  "question_id": "TEST-001",
+                  "question": "Why should backend applications have automated tests?",
+                  "difficulty": "beginner",
+                  "question_type": "conceptual",
+                  "expected_concepts": [
+                    "regression prevention",
+                    "confidence",
+                    "maintainability",
+                    "code quality"
+                  ],
+                  "keywords": [
+                    "testing",
+                    "regression",
+                    "quality"
+                  ]
+                },
+                {
+                  "question_id": "TEST-002",
+                  "question": "A function works correctly manually but frequently breaks after new features are added. What testing strategy would you introduce?",
+                  "difficulty": "intermediate",
+                  "question_type": "scenario",
+                  "expected_concepts": [
+                    "unit tests",
+                    "integration tests",
+                    "regression tests",
+                    "continuous testing"
+                  ],
+                  "keywords": [
+                    "unit",
+                    "integration",
+                    "regression",
+                    "tests"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "name": "Problem Solving and Debugging",
+          "category": "Engineering Skills",
+          "description": "Diagnosing bugs, reasoning about systems and solving unfamiliar technical problems.",
+          "weight": 10,
+          "is_required": true,
+
+          "topics": [
+            {
+              "name": "Debugging",
+              "description": "Systematic debugging and root cause analysis.",
+
+              "questions": [
+                {
+                  "question_id": "DEBUG-001",
+                  "question": "A Django API suddenly starts returning HTTP 500 errors in production. What steps would you take to identify the root cause?",
+                  "difficulty": "intermediate",
+                  "question_type": "debugging",
+                  "expected_concepts": [
+                    "logs",
+                    "stack trace",
+                    "recent changes",
+                    "reproduction",
+                    "root cause analysis"
+                  ],
+                  "keywords": [
+                    "500",
+                    "logs",
+                    "stack trace",
+                    "debugging",
+                    "root cause"
+                  ]
+                },
+                {
+                  "question_id": "DEBUG-002",
+                  "question": "Your API works correctly on your local machine but fails after deployment. How would you systematically investigate the difference?",
+                  "difficulty": "advanced",
+                  "question_type": "problem_solving",
+                  "expected_concepts": [
+                    "environment variables",
+                    "dependencies",
+                    "database configuration",
+                    "settings",
+                    "logs",
+                    "deployment environment"
+                  ],
+                  "keywords": [
+                    "environment",
+                    "dependencies",
+                    "database",
+                    "settings",
+                    "deployment"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

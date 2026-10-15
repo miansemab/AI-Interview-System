@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Room | InterviewAI</title>
+    <link rel="stylesheet" href="{% static 'interviews/css/app.css' %}">
+    <link rel="stylesheet" href="{% static 'interviews/css/interview_room.css' %}">
+</head>
+<body class="interview-room-body">
+    <header class="room-topbar">
+        <a class="brand" href="/"><span class="brand-icon" aria-hidden="true">IA</span><span>Interview<span class="accent">AI</span></span></a>
+        <div class="room-topbar-meta">
+            <span class="room-live-dot" aria-hidden="true"></span>
+            <span>INTERVIEW IN PROGRESS</span>
+            <span class="room-candidate-chip">{{ session.candidate_name }}</span>
+        </div>
+    </header>
+
+    <main class="interview-dashboard">
+        {% if verification_paused %}
+        <section class="speaker-danger" role="alert">
+            <p class="room-kicker">SPEAKER CHECK</p>
+            <h1>Interview paused for a speaker recheck</h1>
+            <p>Two consecutive voice checks fell below the configured acoustic similarity threshold. This can be wrong and does not prove identity or misconduct. Submitted answers and evaluations are preserved.</p>
+            <p>Record a fresh answer sample in a quiet place. If the enrolled speaker matches, the interview resumes.</p>
+            <form id="speakerRecheckForm" method="post" action="{% url 'interviews:speaker_recheck' session.id %}" class="recheck-controls">
+                {% csrf_token %}
+                <button type="button" class="voice-button" id="recordRecheckSample">Record a fresh speaker check (6 seconds)</button>
+                <p id="recheckStatus" class="room-status" role="status">No audio is stored after this verification request.</p>
+                <button type="submit" class="form-button" id="submitRecheckButton" disabled>Verify and resume interview</button>
+            </form>
+            <form method="post" action="{% url 'interviews:delete_speaker_data' session.id %}" class="room-delete-form">
+                {% csrf_token %}<button class="secondary-button" type="submit">Delete voice data and end this interview</button>
+            </form>
+        </section>
+        {% else %}
+        <div class="dashboard-heading">
+            <div>
+                <p class="room-kicker">LIVE INTERVIEW SESSION</p>
+                <h1>Interview room</h1>
+                <p class="dashboard-subtitle">Take a moment to think through each response. Your answers are evaluated and saved as you progress.</p>
+            </div>
+            <div class="progress-summary" aria-label="Question progress">
+                <span class="progress-label">QUESTION PROGRESS</span>
+                <strong><span id="questionProgressCurrent">{{ current_question.order }}</span> <span>of {{ question_limit }}</span></strong>
+                <div id="questionProgressBar" class="progress-track" role="progressbar" aria-label="Question progress" aria-valuemin="0" aria-valuemax="{{ question_limit }}" aria-valuenow="{{ current_question.order }}"><span style="width:{{ progress_percent }}%"></span></div>
+            </div>
+        </div>
+
+        <div class="room-columns">
+            <aside class="candidate-column" aria-label="Candidate camera preview">
+                <section class="room-card camera-card">
+                    <div class="card-heading">
+                        <div><p class="room-kicker">YOUR CAMERA</p><h2>Candidate preview</h2></div>
+                        <span class="privacy-tag">Preview only</span>
+                    </div>
+                    <div class="camera-frame" id="cameraFrame">
+                        <video id="candidateCamera" autoplay muted playsinline aria-label="Live camera preview"></video>
+                        <div id="cameraPlaceholder" class="camera-placeholder">
+                            <span class="camera-placeholder-icon" aria-hidden="true">◉</span>
+                            <strong id="cameraStateTitle">Camera is off</strong>
+                            <span id="cameraStateDetail">Turn it on to preview your camera. Video is not analyzed.</span>
+                        </div>
+                        <span class="camera-live-label" id="cameraLiveLabel" hidden><i></i> LIVE PREVIEW</span>
+                    </div>
+                    <p id="cameraStatus" class="room-status" role="status" aria-live="polite">Camera is off. The preview is optional.</p>
+                    <p id="cameraErrorDetail" class="camera-error-detail" role="alert" aria-live="assertive" hidden></p>
+                    <button type="button" id="cameraToggle" class="secondary-button camera-toggle" aria-pressed="false">Turn camera on</button>
+                    <p class="camera-privacy-note">Your camera is used only for the live preview on this page. Video is not sent to the interview server.</p>
+                </section>
+
+                <section class="room-card candidate-info-card">
+                    <p class="room-kicker">CANDIDATE</p>
+                    <h2>{{ session.candidate_name }}</h2>
+                    <p>{{ session.role.name }}</p>
+                </section>
+            </aside>
+
+            <section class="room-card interviewer-card" aria-label="AI interviewer and answer panel">
+                <div class="interviewer-heading">
+                    <div class="assistant-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+                    <div class="interviewer-name"><p class="room-kicker">AI INTERVIEWER</p><h2>Interview assistant</h2></div>
+                    <span class="assistant-mode">Question and answer</span>
+                </div>
+                <p class="assistant-disclosure">Questions are selected by the interview system. Submitted answers are scored by the configured evaluation engine.</p>
+
+                <div class="question-details">
+                    <span id="currentQuestionSkill">{{ current_question.question.skill.name }}</span>
+                    <span id="currentQuestionTopic">{{ current_question.question.topic.name }}</span>
+                    <span id="currentQuestionDifficulty">{{ current_question.question.difficulty|title }}</span>
+                </div>
+                <div class="question-heading"><span>QUESTION <span id="currentQuestionOrder">{{ current_question.order }}</span></span><span id="answeredQuestionCount" class="question-count">{{ answered_count }} answered</span></div>
+                <h2 id="interviewQuestion" class="room-question" aria-live="polite">{{ current_question.question.question }}</h2>
+
+                <div class="voice-controls room-voice-controls">
+                    <button type="button" class="voice-button" id="speakQuestion">Listen to question</button>
+                    <button type="button" class="voice-button" id="startListening">Answer with voice</button>
+                    <button type="button" class="voice-button" id="stopListening">Stop listening</button>
+                </div>
+                <div class="voice-visualizer" id="interviewVisualizer" aria-label="Voice activity indicator"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <p id="voiceStatus" class="room-status" role="status" aria-live="polite">Browser speech recognition creates the transcript. While voice input is active, this page also captures that spoken response locally for speaker comparison. Browser speech recognition does not provide its raw audio to this application.</p>
+
+                <div id="speakerDangerAlert" class="inline-speaker-danger" role="alert" hidden>
+                    <strong>Speaker check paused the interview.</strong>
+                    <span>Refresh this page to retry verification. Previously submitted answers and evaluations are preserved.</span>
+                </div>
+
+                <form method="post" action="{% url 'interviews:submit_answer' session.id %}" id="answerForm" class="answer-form">
+                    {% csrf_token %}
+                    <input type="hidden" id="interviewQuestionId" name="interview_question_id" value="{{ current_question.id }}">
+                    <input type="hidden" id="answerSource" name="answer_source" value="text">
+                    <div class="form-field">
+                        <label for="answer">Your answer</label>
+                        <textarea class="answer-textarea" id="answer" name="answer" placeholder="Write your response here…" required></textarea>
+                    </div>
+                    <p class="answer-guidance">Review your response before submitting. Spoken answers are captured during voice input for speaker comparison. Typed answers are not speaker-verified and can be submitted without a recording.</p>
+                    <button type="submit" class="form-button answer-submit-button" id="answerSubmitButton">Submit answer and continue <span aria-hidden="true">→</span></button>
+                    <p id="answerSubmitStatus" class="submit-status" role="status" aria-live="polite"></p>
+                </form>
+
+                <form id="finishInterviewForm" method="post" action="{% url 'interviews:finish_interview' session.id %}" class="finish-form">
+                    {% csrf_token %}
+                    <button type="submit" id="finishInterviewButton" class="secondary-button">Finish interview and view results</button>
+                    <p id="finishInterviewStatus" class="submit-status" role="status" aria-live="polite"></p>
+                    <p class="answer-guidance">You can finish after at least one answer is submitted and evaluated. Unanswered questions will not be scored.</p>
+                </form>
+                <form method="post" action="{% url 'interviews:delete_speaker_data' session.id %}" class="room-delete-form">
+                    {% csrf_token %}<button class="text-button" type="submit">Delete voice data and re-enroll</button>
+                    <p class="answer-guidance">This clears the temporary speaker reference and keeps submitted answers and evaluations.</p>
+                </form>
+            </section>
+        </div>
+        {% endif %}
+    </main>
+    <footer class="room-footer"><span>INTERVIEWAI</span><span>Voice checks compare audio samples; they do not prove identity.</span></footer>
+
+    <script src="{% static 'interviews/js/speaker_capture.js' %}"></script>
+    <script src="{% static 'interviews/js/app.js' %}?v=speech-recognition-resume-20261015"></script>
+</body>
+</html>

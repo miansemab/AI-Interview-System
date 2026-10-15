@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice enrollment | InterviewAI</title>
+    <link rel="stylesheet" href="{% static 'interviews/css/app.css' %}">
+    <style>
+        .consent-card{max-width:760px;margin:42px auto;padding:28px;text-align:left}
+        .privacy-list{line-height:1.8;padding-left:20px}
+        .record-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:20px 0}
+        .recorded{color:#72e8ff}.error-message{color:#ff8585}.success-message{color:#72e8ff}
+        #enrollmentStatus{min-height:1.6em}.enrollment-busy{opacity:.75;cursor:wait}
+    </style>
+</head>
+<body>
+    <header class="topbar"><a class="brand" href="/"><span class="brand-icon">✦</span><span>Interview<span class="accent">AI</span></span></a><span class="system-status"><span class="status-dot"></span> VOICE ENROLLMENT</span></header>
+    <main class="page-container">
+        <section class="panel consent-card">
+            <div class="eyebrow">BEFORE THE INTERVIEW</div>
+            <h1>Enroll a <span class="gradient-text">reference voice</span></h1>
+            <p>We compare short voice samples during answers with two reference samples so the application can notice a change in the acoustic speaker. This is an automated similarity check, not proof of identity or liveness detection.</p>
+            <ul class="privacy-list">
+                <li><strong>Consent:</strong> recording starts only after you agree below and press the record button.</li>
+                <li><strong>Processing:</strong> reference and verification recordings are sent only to this application server and compared locally using SpeechBrain ECAPA-TDNN. This project does not upload those recordings to a third-party verification provider. The public pretrained model may be downloaded from Hugging Face on first use; that download contains model files, not your audio. Browser-native SpeechRecognition is separate and may process audio through your browser's provider; consult your browser's privacy controls or type answers instead.</li>
+                <li><strong>Retention:</strong> raw reference and answer samples stay in this browser page's memory until successfully sent, replaced, cleared, or the page is closed. The server holds each upload only while processing its request and then discards it. The resulting voice embedding is kept in server process memory for at most two hours, or deleted when the interview ends or you request deletion. Restarting the server may expire it earlier.</li>
+                <li><strong>Deletion:</strong> use “Delete voice data” during the interview to clear the reference and enroll again. You can also ask the interview administrator to remove the interview record; voice samples and embeddings are not stored in that record.</li>
+                <li><strong>Limits:</strong> short, very quiet, or distorted clips are rejected for retry. A similarity result can be wrong, especially across accents, microphones, background noise, or speech conditions. This system is not biometric authentication.</li>
+            </ul>
+            <form id="speakerEnrollmentForm" action="{% url 'interviews:speaker_enrollment' session.id %}" method="post">
+                {% csrf_token %}
+                <label style="display:block;margin-top:18px"><input id="speakerConsent" type="checkbox" name="consent" value="on"> I consent to the voice processing described above for this interview.</label>
+                <div class="record-row">
+                    <button type="button" class="voice-button" id="recordReferenceSample" disabled>Record reference sample 1 of 2</button>
+                    <button type="button" class="secondary-button" id="retryReferenceSamples">Clear samples and retry</button>
+                    <span id="referenceSampleCount" class="recorded">0 / 2 samples recorded</span>
+                </div>
+                <p id="enrollmentStatus" role="status" aria-live="polite" class="muted">Agree to voice processing to enable recording. Each sample records for six seconds in a quiet place.</p>
+                <button type="submit" class="form-button" id="enrollSpeakerButton" disabled>Enroll voice and begin interview</button>
+            </form>
+            <form method="post" action="{% url 'interviews:delete_speaker_data' session.id %}" style="margin-top:16px">{% csrf_token %}<button class="secondary-button" type="submit">Delete voice data</button></form>
+        </section>
+    </main>
+    <script src="{% static 'interviews/js/speaker_capture.js' %}"></script>
+    <script src="{% static 'interviews/js/speaker_enrollment.js' %}"></script>
+</body>
+</html>
